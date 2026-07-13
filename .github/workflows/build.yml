@@ -1,0 +1,32 @@
+name: build
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up MSVC (x64)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Compile
+        shell: cmd
+        run: |
+          cl /O2 /EHsc /DUNICODE /D_UNICODE src\rtr_latency.cpp ^
+             d3d11.lib dxgi.lib dxguid.lib user32.lib ^
+             /link /OUT:rtr_latency.exe
+
+      - name: Upload exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtr_latency-exe
+          path: rtr_latency.exe
+          if-no-files-found: error
