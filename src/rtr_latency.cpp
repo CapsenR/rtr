@@ -39,6 +39,7 @@
 // -----------------------------------------------------------------------------
 
 #define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include <windows.h>
 #include <d3d11.h>
 #include <dxgi1_3.h>
@@ -244,7 +245,8 @@ done:
     printf("\n==== summary over %zu measured frames ====\n", data.size());
     if (!ci.empty()) {
         report("frame interval", ci, "ms");
-        report("  -> as FPS", { 1000.0 / std::max(1e-9, mean(ci)) }, "fps(mean)");
+        double fpsMean = 1000.0 / (mean(ci) > 1e-9 ? mean(ci) : 1e-9);
+        printf("  %-22s %.2f fps\n", "-> as FPS(mean)", fpsMean);
         report("gpu render", gr, "ms");
         report("present->flip", pf, "ms");
         printf("\nInterpretation:\n");
