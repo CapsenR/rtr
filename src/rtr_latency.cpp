@@ -42,7 +42,6 @@
 #include <windows.h>
 #include <d3d11.h>
 #include <dxgi1_3.h>
-#include <dxguid.h>
 #include <cstdio>
 #include <cstdint>
 #include <vector>
